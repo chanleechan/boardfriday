@@ -11,13 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lch.board.JDBCInfo.JDBCInfo;
 import com.lch.board.domain.BoardDomain;
+import com.lch.board.domain.PageDomain;
 public class BoardDao {
 	Connection conn;
 	Statement stmt;
 	ResultSet rs;
 	PreparedStatement pstmt;
 	
-	public ArrayList<BoardDomain> boardList() throws SQLException{
+	public ArrayList<BoardDomain> boardList2() throws SQLException{
 		ArrayList<BoardDomain> boardList = null;
 			boardList = new ArrayList<BoardDomain>();
 		conn = JDBCInfo.getConnection();
@@ -42,6 +43,48 @@ public class BoardDao {
 		}
 		rs.close();
 		stmt.close();
+		conn.close();
+		
+		return boardList;
+	}
+	
+	public ArrayList<BoardDomain> boardList() throws SQLException{
+		ArrayList<BoardDomain> boardList = null;
+			boardList = new ArrayList<BoardDomain>();
+		PageDomain pd = new PageDomain();	
+		int page = 0;
+		int pageNum = 10;
+		
+		pd.setPage(page);
+		pd.setPageNum(pageNum);
+		
+		page = pd.getPage();
+		pageNum = pd.getPageNum();
+		
+		conn = JDBCInfo.getConnection();
+		String sql = "select * from board limit ?,?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, page);
+			pstmt.setInt(2, pageNum);
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				BoardDomain bd = new BoardDomain();
+				bd.setBoardNum(rs.getInt("boardNum"));
+				bd.setTitle(rs.getString("title"));
+				bd.setContents(rs.getString("contents"));
+				boardList.add(bd);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		rs.close();
+		pstmt.close();
 		conn.close();
 		
 		return boardList;
@@ -199,12 +242,12 @@ public class BoardDao {
 		ArrayList<BoardDomain> searchList = null;
 		searchList = new ArrayList<BoardDomain>();
 		String search = req.getParameter("contents");
-		String searchSQL = "select * from board where contents like '%?%' ";
+		String searchSQL = "select * from board where contents like ? ";
 		System.out.println(searchSQL);
 		conn = JDBCInfo.getConnection();
 		
 		pstmt = conn.prepareStatement(searchSQL);
-		pstmt.setString(1, search);
+		pstmt.setString(1, "%"+search+"%");
 		rs = pstmt.executeQuery();
 		
 		while(rs.next()) {
@@ -232,7 +275,7 @@ public class BoardDao {
 		title = req.getParameter("title");
 		contents = req.getParameter("contents");
 		
-		String replySQL = "insert into replyboard values(null, ?,?, ?";
+		String replySQL = "insert into replyboard values(null, ?,?, ?)";
 		
 		conn = JDBCInfo.getConnection();
 		pstmt = conn.prepareStatement(replySQL);
