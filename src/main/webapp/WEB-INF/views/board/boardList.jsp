@@ -6,6 +6,7 @@
 <head>
 	<title>게시판 목록</title>
 </head>
+
 <body>
 <div>
 	<table>
@@ -16,12 +17,18 @@
 		</tr>
 		<c:forEach var="boardList"  items="${boardList }">
 		<tr>
-			<td>${boardList.boardNum} </td>
-			<td>${boardList.title }</td>
+			<td><p>${boardList.boardNum}</p> 
+			<input type="hidden" name="boardNum" value = "${boardList.boardNum} ">
+			</td>
+			<td><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
 			<td>${boardList.contents }</td>
 		</tr>
 		</c:forEach>
 	</table>
+</div>
+<div>
+<a href ="/board/insertBoardForm">새 글 쓰기</a>
+
 </div>
 
 

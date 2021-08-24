@@ -19,7 +19,7 @@ public class JDBCInfo {
 			e.printStackTrace();
 		}
 		Connection conn = DriverManager.getConnection(jdbcUrl,userId,userPass);
-		
+		conn.setAutoCommit(false);
 		return conn;
 	}
 	
