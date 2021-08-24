@@ -30,14 +30,14 @@ public class BoardController {
 		
 		return pageNm;
 	}
-	@RequestMapping("insertBoardForm")
+	@RequestMapping("/insertBoardForm")
 	public String insertBoardForm()  {
 		String pageNm = "";
 		pageNm = "/board/insertBoardForm";
 		return pageNm;
 	}
 	
-	@RequestMapping( "insertBoard")
+	@RequestMapping( "/insertBoard")
 	public String insertBoard(HttpServletRequest req) throws SQLException {
 		String pageNm = "";
 		int check = 0;
@@ -48,7 +48,7 @@ public class BoardController {
 		}
 		return pageNm;
 	}
-	@RequestMapping("selectBoard")
+	@RequestMapping("/selectBoard")
 	public String selectBoard(Model model,HttpServletRequest req) throws SQLException {
 		BoardDomain selectBoard = new BoardDomain();
 		String pageNm = "";
@@ -62,7 +62,7 @@ public class BoardController {
 		return pageNm;
 	}
 	
-	@RequestMapping("deleteBoard")
+	@RequestMapping("/deleteBoard")
 	public String deleteBoard(HttpServletRequest req) throws SQLException {
 		int check = 0;
 		String pageNm = "";
@@ -75,7 +75,7 @@ public class BoardController {
 		return pageNm ;
 	}
 	
-	@RequestMapping("updateBoard")
+	@RequestMapping("/updateBoard")
 	public String updateBoard(HttpServletRequest req) throws SQLException {
 		int check = 0;
 		String pageNm = "";
@@ -87,5 +87,21 @@ public class BoardController {
 		return pageNm ;
 	}
 	
-
+	@RequestMapping("/searchBoard")
+	public String searchList(Model model,HttpServletRequest req) throws SQLException {
+		ArrayList<BoardDomain> boardList = null;
+			boardList = new ArrayList<BoardDomain>();
+		String pageNm = "";
+		BoardService bs = new BoardService();
+		boardList = bs.searchContents(req);
+		
+		if(boardList.size() > 0 ) {
+			model.addAttribute("boardList",boardList);
+			pageNm = "/board/searchList";
+		}
+		
+		
+		return pageNm;
+		
+	}
 }

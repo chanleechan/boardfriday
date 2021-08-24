@@ -166,7 +166,7 @@ public class BoardDao {
 		conn.commit();
 		
 		if(check > 0) {
-			System.out.println("�����Ϸ�");
+			System.out.println("수정성공");
 			check = 1;
 		}
 		pstmt.close();
@@ -193,6 +193,32 @@ public class BoardDao {
 			boardSelect.setContents(rs.getString("contents"));
 		}
 		return boardSelect;
+	}
+	public ArrayList<BoardDomain> searchContents(HttpServletRequest req) throws SQLException{
+		System.out.println("dd");
+		ArrayList<BoardDomain> searchList = null;
+		searchList = new ArrayList<BoardDomain>();
+		String search = req.getParameter("contents");
+		String searchSQL = "select * from board where contents like '%?%' ";
+		System.out.println(searchSQL);
+		conn = JDBCInfo.getConnection();
+		
+		pstmt = conn.prepareStatement(searchSQL);
+		pstmt.setString(1, search);
+		rs = pstmt.executeQuery();
+		
+		while(rs.next()) {
+			BoardDomain bd = new BoardDomain();
+			bd.setBoardNum(rs.getInt("boardNum"));
+			bd.setTitle(rs.getString("title"));
+			bd.setContents(rs.getString("contents"));
+			searchList.add(bd);
+		}
+		rs.close();
+		pstmt.close();
+		conn.close();
+		
+		return searchList;
 	}
 	
 	public int insertReplyBoard(HttpServletRequest req) throws SQLException {
@@ -221,5 +247,19 @@ public class BoardDao {
 		}
 		
 		return check;
+	}
+	public int deleteReplyBoard(HttpServletRequest req) throws SQLException {
+		int check = 0;
+		String replyNum = req.getParameter("replyNum");
+		String deleteSQL = "delete from replyboard where replyNum = ?";
+		conn = JDBCInfo.getConnection();
+		
+		pstmt = conn.prepareStatement(deleteSQL);
+		pstmt.setString(1, replyNum);
+		check = pstmt.executeUpdate();
+		if(check > 0) {
+			check = 1;
+		}
+		return check ;
 	}
 }

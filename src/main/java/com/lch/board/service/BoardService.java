@@ -51,6 +51,15 @@ public class BoardService {
 		return selectBoard;
 	}
 	
+	public ArrayList<BoardDomain> searchContents(HttpServletRequest req) throws SQLException{
+		ArrayList<BoardDomain> searchList = null;
+		searchList = new ArrayList<BoardDomain>();
+		BoardDao bd = new BoardDao();
+		searchList = bd.searchContents(req);
+		
+		return searchList;
+	}
+	
 	
 
 }
