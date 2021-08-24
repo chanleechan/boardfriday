@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lch.board.JDBCInfo.JDBCInfo;
 import com.lch.board.domain.BoardDomain;
-import com.lch.board.domain.ReplyDomain;
-
 public class BoardDao {
 	Connection conn;
 	Statement stmt;

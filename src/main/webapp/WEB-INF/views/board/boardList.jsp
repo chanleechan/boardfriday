@@ -25,6 +25,7 @@
 		</tr>
 		</c:forEach>
 	</table>
+	<a href = "#">1</a>
 </div>
 <div>
 <a href ="/board/insertBoardForm">새 글 쓰기</a>
