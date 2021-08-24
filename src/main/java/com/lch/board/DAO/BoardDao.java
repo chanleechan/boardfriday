@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lch.board.JDBCInfo.JDBCInfo;
 import com.lch.board.domain.BoardDomain;
+import com.lch.board.domain.ReplyDomain;
 
 public class BoardDao {
 	Connection conn;
@@ -123,7 +124,7 @@ public class BoardDao {
 		check = pstmt.executeUpdate();
 		
 		if(check >0) {
-			System.out.println("Ãß°¡¿Ï·á");
+			System.out.println("ì¶”ê°€ì„±ê³µ");
 			check = 1;
 		}
 		return check;
@@ -141,7 +142,7 @@ public class BoardDao {
 		conn.commit();
 		
 		if(check>0) {
-			System.out.println("»èÁ¦¿Ï·á");
+			System.out.println("ì‚­ì œì„±ê³µ");
 			check = 1;
 		}
 		pstmt.close();
@@ -167,7 +168,7 @@ public class BoardDao {
 		conn.commit();
 		
 		if(check > 0) {
-			System.out.println("¼öÁ¤¿Ï·á");
+			System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½");
 			check = 1;
 		}
 		pstmt.close();
@@ -193,8 +194,34 @@ public class BoardDao {
 			boardSelect.setTitle(rs.getString("title"));
 			boardSelect.setContents(rs.getString("contents"));
 		}
-		
 		return boardSelect;
 	}
-
+	
+	public int insertReplyBoard(HttpServletRequest req) throws SQLException {
+//		ReplyDomain replyBoard  = new ReplyDomain();
+		
+		int check = 0;
+		String boardNum = "";
+		String title = "";
+		String contents = "";
+		boardNum = req.getParameter("boardNum");
+		title = req.getParameter("title");
+		contents = req.getParameter("contents");
+		
+		String replySQL = "insert into replyboard values(null, ?,?, ?";
+		
+		conn = JDBCInfo.getConnection();
+		pstmt = conn.prepareStatement(replySQL);
+		pstmt.setString(1, title);
+		pstmt.setString(2, contents);
+		pstmt.setString(3, boardNum);				
+		check = pstmt.executeUpdate();
+		conn.commit();
+		
+		if(check > 0) {
+			check = 1;
+		}
+		
+		return check;
+	}
 }

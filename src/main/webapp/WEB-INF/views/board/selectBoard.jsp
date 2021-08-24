@@ -21,6 +21,12 @@
 		<input type="hidden" name="boardNum" value = "${selectBoard.boardNum }">
 		<input type = "submit"  value = "삭제하기">
 	</form>
+	<form action ="/board/replyBoard" method = "post">
+		<input type ="hidden" name = "boardNum" value = "${selectBoard.boardNum }">
+		<p>제목<input type ="text" name = "title"></p>
+		<p>내용<textarea name ="contents" ></textarea></p>
+		<input type ="submit" value = "답글달기">
+	</form>
 	
 </div>
 <div>
