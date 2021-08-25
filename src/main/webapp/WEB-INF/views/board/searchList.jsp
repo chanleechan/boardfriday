@@ -25,9 +25,13 @@
 		</tr>
 		</c:forEach>
 	</table>
-	<a href = "#">1</a>
-	<form action ="#" method = "get">
-	<p><input type ="text" name="conetns"><input type="submit" value = "검색" ></p>
+	<!-- 
+	<c:forEach var="totalNumList" items="${totalNumList }">
+		<a href = "/board/searchBoard?pageNum=${totalNumList }" >${totalNumList }</a>
+	</c:forEach>	
+	 -->
+	<form action ="/board/searchBoard" method = "get">
+	<p><input type ="text" name="contents"><input type="submit" value = "검색" ></p>
 	</form>
 </div>
 <div>

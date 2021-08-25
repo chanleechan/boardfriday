@@ -17,24 +17,23 @@
 		</tr>
 		<c:forEach var="boardList"  items="${boardList }">
 		<tr>
-			<td><p>${boardList.boardNum}</p> 
-			<input type="hidden" name="boardNum" value = "${boardList.boardNum} ">
+			<td><p>${boardList.boardSeq}</p> 
+			<input type="hidden" name="boardSeq" value = "${boardList.boardSeq} ">
 			</td>
 			<td><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
 			<td>${boardList.contents }</td>
 		</tr>
 		</c:forEach>
 	</table>
-	<a href = "#">1</a>
+	<c:forEach var="totalNumList" items="${totalNumList }">
+		<a href = "/board/boardList?pageNum=${totalNumList }" >${totalNumList }</a>
+	</c:forEach>
 	<form action ="/board/searchBoard" method = "get">
-	<p><input type ="text" name="conetns"> <input type="submit" value = "검색" ></p>
+	<p><input type ="text" name="contents" placeholder="검색"> <input type="submit" value = "검색" ></p>
 	</form>
 </div>
 <div>
 <a href ="/board/insertBoardForm">새 글 쓰기</a>
-
 </div>
-
-
 </body>
 </html>

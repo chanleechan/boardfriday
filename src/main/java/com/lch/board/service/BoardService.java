@@ -10,14 +10,13 @@ import com.lch.board.DAO.BoardDao;
 //import org.springframework.stereotype.Service;
 
 import com.lch.board.domain.BoardDomain;
-
 public class BoardService {
 	
-	public ArrayList<BoardDomain> boardList() throws SQLException{
+	public ArrayList<BoardDomain> boardList( HttpServletRequest req) throws SQLException{
 		ArrayList<BoardDomain> boardList= 
 				new ArrayList<BoardDomain>();
 		BoardDao bd = new BoardDao();
-		boardList = bd.boardList();
+		boardList = bd.boardList(req);
 		return boardList;
 	}
 	
@@ -58,6 +57,24 @@ public class BoardService {
 		searchList = bd.searchContents(req);
 		
 		return searchList;
+	}
+	
+	public ArrayList<Integer> totalNum() throws SQLException{
+		ArrayList<Integer> totalNumList = null;
+		totalNumList = new ArrayList<Integer>();
+		
+		BoardDao bd = new BoardDao();
+		
+		totalNumList = bd.totalNum();
+		
+		return totalNumList;
+	}
+	
+	public int insertReplyBoard(HttpServletRequest req) throws SQLException {
+		int check = 0;
+		BoardDao bd = new BoardDao();
+		check = bd.insertReplyBoard(req);
+		return check;
 	}
 	
 	

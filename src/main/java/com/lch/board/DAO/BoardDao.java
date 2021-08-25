@@ -11,41 +11,98 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lch.board.JDBCInfo.JDBCInfo;
 import com.lch.board.domain.BoardDomain;
+import com.lch.board.domain.PageDomain;
 public class BoardDao {
 	Connection conn;
 	Statement stmt;
 	ResultSet rs;
 	PreparedStatement pstmt;
 	
-	public ArrayList<BoardDomain> boardList() throws SQLException{
+	public ArrayList<BoardDomain> boardList(HttpServletRequest req) throws SQLException{
 		ArrayList<BoardDomain> boardList = null;
 			boardList = new ArrayList<BoardDomain>();
-		conn = JDBCInfo.getConnection();
-		String sql = "select * from board";
+		PageDomain pd = new PageDomain();
 		
+		int page;
+		String stringPage = "1";
+		//최초 들어오는 getParameter는 null 이후 a태그로 인하여 getParameter전달됨
+		if(req.getParameter("pageNum") == null || "null".equals(req.getParameter("pageNum"))) {
+			stringPage = "1";
+		}else {
+			stringPage = req.getParameter("pageNum");
+		}
+		
+		page = Integer.parseInt(stringPage);
+		int pageNum = 10;
+		if(page <=0) {
+			page = 0;
+		}
+		page = (page-1) * 10;
+		pd.setPage(page);
+		pd.setPageNum(pageNum);
+
+		page = pd.getPage();
+		pageNum = pd.getPageNum();
+
+		conn = JDBCInfo.getConnection();
+		//String sql = "select * from board order by boardNum desc limit ?,? ";
+		String sql = "select boardNum,boardSeq , title, contents, groupNum, groupLevel "
+				+ "from board "
+				+ "order by boardSeq desc, groupNum desc limit ?,?";
 		try {
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
-			
-			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, page);
+			pstmt.setInt(2, pageNum);
+			rs = pstmt.executeQuery();
+
+
 			while(rs.next()) {
 				BoardDomain bd = new BoardDomain();
 				bd.setBoardNum(rs.getInt("boardNum"));
+				bd.setBoardSeq(rs.getInt("boardSeq"));
 				bd.setTitle(rs.getString("title"));
 				bd.setContents(rs.getString("contents"));
 				boardList.add(bd);
 			}
-			
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		rs.close();
-		stmt.close();
+		pstmt.close();
 		conn.close();
-		
+
 		return boardList;
 	}
+	public ArrayList<Integer> totalNum() throws SQLException{
+		ArrayList<Integer> pageNumList = new ArrayList<Integer>();
+		ArrayList<PageDomain> totalNumList = new ArrayList<PageDomain>();
+		conn = JDBCInfo.getConnection();
+		String totalNumSQL = "select count(boardNum) as totalNum from board";
+		
+		pstmt = conn.prepareStatement(totalNumSQL);
+		rs = pstmt.executeQuery();
+		
+		if(rs.next()) {
+			PageDomain pd = new PageDomain();
+			pd.setTotalNum(rs.getInt("totalNum"));
+			totalNumList.add(pd);
+			
+			int totalNum = 0;
+			
+			totalNum = pd.getTotalNum()/10;
+			
+			if(pd.getTotalNum()%10 >0) {
+				totalNum++;
+			}
+			for(int i = 1; i<=totalNum; i++) {
+				pageNumList.add(i);
+			}
+		}
+		
+		return pageNumList;
+	}
+	
 	public ArrayList<BoardDomain> selectBoard(HttpServletRequest req) throws SQLException{
 		ArrayList<BoardDomain> boardList = null;
 			boardList = new ArrayList<BoardDomain>();
@@ -63,7 +120,7 @@ public class BoardDao {
 		
 		if(rs.next()) {
 			BoardDomain bd = new BoardDomain();
-			bd.setBoardNum(rs.getInt("boardNum"));
+			bd.setBoardSeq(rs.getInt("boardSeq"));
 			bd.setTitle(rs.getString("title"));
 			bd.setContents(rs.getString("contents"));
 			boardList.add(bd);
@@ -112,7 +169,8 @@ public class BoardDao {
 		title = req.getParameter("title");
 		contents = req.getParameter("contents");
 		conn = JDBCInfo.getConnection();
-		String insertBoard = "insert into board values(null, ?,?)";
+		String insertBoard = "insert into board(boardNum,title,contents,groupNum,groupLevel,boardSeq) "
+				+ "values(null, ?,?,(select max(boardSeq)+1 from board as t1),0,(select max(boardSeq)+1 from board as t1))";
 		pstmt = conn.prepareStatement(insertBoard);
 		pstmt.setString(1, title);
 		pstmt.setString(2, contents);
@@ -189,22 +247,54 @@ public class BoardDao {
 		if(rs.next()) {
 			boardSelect = new BoardDomain();
 			boardSelect.setBoardNum(Integer.parseInt(boardNum));
+			boardSelect.setBoardSeq(rs.getInt("boardSeq"));
 			boardSelect.setTitle(rs.getString("title"));
 			boardSelect.setContents(rs.getString("contents"));
 		}
 		return boardSelect;
 	}
 	public ArrayList<BoardDomain> searchContents(HttpServletRequest req) throws SQLException{
-		System.out.println("dd");
 		ArrayList<BoardDomain> searchList = null;
 		searchList = new ArrayList<BoardDomain>();
-		String search = req.getParameter("contents");
-		String searchSQL = "select * from board where contents like '%?%' ";
-		System.out.println(searchSQL);
+		PageDomain pd = new PageDomain();
+		int page;
+		String stringPage = "1";
+		
+		//최초 들어오는 getParameter는 null 이후 a태그로 인하여 getParameter전달됨
+		if(req.getParameter("pageNum") == null || "null".equals(req.getParameter("pageNum"))) {
+			stringPage = "1";
+		}else {
+			stringPage = req.getParameter("pageNum");
+		}
+		
+		page = Integer.parseInt(stringPage);
+		int pageNum = 10;
+		if(page <=0) {
+			page = 0;
+		}
+		page = (page-1) * 10;
+		pd.setPage(page);
+		pd.setPageNum(pageNum);
+
+		page = pd.getPage();
+		pageNum = pd.getPageNum();
+		
+		
+		String search = "";
+		String searchSQL = "";
+//		if(req.getParameter("contents") == null  || "".equals(req.getParameter("contents"))) {
+//			searchSQL = "select * from board";
+//			search = "";
+//		}else {
+			search = req.getParameter("contents");
+			searchSQL = "select * from board where contents like ? order by boardNum desc limit ?,? ";
+//		}
 		conn = JDBCInfo.getConnection();
 		
 		pstmt = conn.prepareStatement(searchSQL);
-		pstmt.setString(1, search);
+		pstmt.setString(1, "%"+search+"%");
+		pstmt.setInt(2, page);
+		pstmt.setInt(3, pageNum);
 		rs = pstmt.executeQuery();
 		
 		while(rs.next()) {
@@ -225,20 +315,27 @@ public class BoardDao {
 //		ReplyDomain replyBoard  = new ReplyDomain();
 		
 		int check = 0;
-		String boardNum = "";
+		int boardSeq = 0;
 		String title = "";
 		String contents = "";
-		boardNum = req.getParameter("boardNum");
+		boardSeq = Integer.parseInt(req.getParameter("boardSeq"));
 		title = req.getParameter("title");
 		contents = req.getParameter("contents");
 		
-		String replySQL = "insert into replyboard values(null, ?,?, ?";
+		String replySQL = "insert into board(boardNum,title,contents,groupNum,groupLevel,boardSeq) " + 
+				"	values(null,?,?, " + 
+				"	(select b.groupNum from board b where boardSeq = ?), " + 
+				"	(select max(b.groupLevel)+1 from board b where groupNum = ?), " + 
+				"	(select b.boardSeq from board b where groupNum = ?) " + 
+				");";
 		
 		conn = JDBCInfo.getConnection();
 		pstmt = conn.prepareStatement(replySQL);
 		pstmt.setString(1, title);
 		pstmt.setString(2, contents);
-		pstmt.setString(3, boardNum);				
+		pstmt.setInt(3, boardSeq);
+		pstmt.setInt(4, boardSeq);
+		pstmt.setInt(5, boardSeq);
 		check = pstmt.executeUpdate();
 		conn.commit();
 		
