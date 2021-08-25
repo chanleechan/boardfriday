@@ -4,13 +4,27 @@ public class BoardDomain {
 	private int boardNum;
 	private String title;
 	private String contents;
-	private int parent_id;
+	private int groupNum;
+	private int groupLevel;
+	private int boardSeq;
 	
-	public int getParent_id() {
-		return parent_id;
+	public int getGroupNum() {
+		return groupNum;
 	}
-	public void setParent_id(int parent_id) {
-		this.parent_id = parent_id;
+	public void setGroupNum(int groupNum) {
+		this.groupNum = groupNum;
+	}
+	public int getGroupLevel() {
+		return groupLevel;
+	}
+	public void setGroupLevel(int groupLevel) {
+		this.groupLevel = groupLevel;
+	}
+	public int getBoardSeq() {
+		return boardSeq;
+	}
+	public void setBoardSeq(int boardSeq) {
+		this.boardSeq = boardSeq;
 	}
 	public int getBoardNum() {
 		return boardNum;
