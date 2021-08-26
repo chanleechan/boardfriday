@@ -64,7 +64,6 @@ public class BoardDao {
 				bd.setBoardSeq(rs.getInt("boardSeq"));
 				bd.setTitle(rs.getString("title"));
 				bd.setContents(rs.getString("contents"));
-				bd.setGroupLevel(rs.getInt("groupLevel"));
 				boardList.add(bd);
 			}
 
@@ -149,7 +148,11 @@ public class BoardDao {
 		contents = req.getParameter("contents");
 		conn = JDBCInfo.getConnection();
 		String insertBoard = "insert into board(boardNum,title,contents,groupNum,groupLevel,boardSeq) "
+<<<<<<< HEAD
 				+ "values(null, ?,?,(select max(boardNum)+1 from board as t1),0,0";
+=======
+				+ "values(null, ?,?,(select max(boardSeq)+1 from board as t1),0,(select max(boardSeq)+1 from board as t1))";
+>>>>>>> ff52be45bdf605a24b723ad3f587bb198dd5e3d7
 		pstmt = conn.prepareStatement(insertBoard);
 		pstmt.setString(1, title);
 		pstmt.setString(2, contents);
@@ -316,9 +319,15 @@ public class BoardDao {
 		
 		String replySQL = "insert into board(boardNum,title,contents,groupNum,groupLevel,boardSeq) " + 
 				"	values(null,?,?, " + 
+<<<<<<< HEAD
 				"	(select b.groupNum from board b where boardNum = ?), " + 
 				"	(select max(b.groupLevel)+1 from board b where boardSeq = ?), " + //이부분 수정해야댐 대댓글이 잘 안됨
 				"	(select b.boardSeq from board b where boardNum = ?) " + 
+=======
+				"	(select b.groupNum from board b where boardSeq = ?), " + 
+				"	(select max(b.groupLevel)+1 from board b where groupNum = ?), " + 
+				"	(select b.boardSeq from board b where groupNum = ?) " + 
+>>>>>>> ff52be45bdf605a24b723ad3f587bb198dd5e3d7
 				");";
 		
 		conn = JDBCInfo.getConnection();

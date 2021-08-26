@@ -31,10 +31,15 @@
 		<a href = "/board/searchBoard?pageNum=${totalNumList }" >${totalNumList }</a>
 	</c:forEach>	
 	 -->
+<<<<<<< HEAD
 </div>
 <div class="pagebar">
 	<form action ="/board/searchBoard" method = "get">
 	<p><input type ="text" name="contents"> <input type="submit" value = "검색" ></p>
+=======
+	<form action ="/board/searchBoard" method = "get">
+	<p><input type ="text" name="contents"><input type="submit" value = "검색" ></p>
+>>>>>>> ff52be45bdf605a24b723ad3f587bb198dd5e3d7
 	</form>
 </div>
 <div class = "newBoard">

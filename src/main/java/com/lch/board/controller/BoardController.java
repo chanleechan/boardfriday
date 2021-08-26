@@ -30,8 +30,6 @@ public class BoardController {
 			model.addAttribute("boardList",boardList);
 			model.addAttribute("totalNumList",totalNumList);
 			pageNm = "/board/boardList";
-		}else {
-			pageNm ="/board/boardList";
 		}
 		
 		return pageNm;
@@ -118,7 +116,7 @@ public class BoardController {
 		BoardService bs = new BoardService();
 		check = bs.insertReplyBoard(req);
 		if(check > 0) {
-			pageNm = "redirect:/boardList";
+			pageNm = "redirect/boardList";
 		}
 		return pageNm;
 	}
