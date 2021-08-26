@@ -20,7 +20,14 @@
 			<td><p>${boardList.boardSeq}</p> 
 			<input type="hidden" name="boardSeq" value = "${boardList.boardSeq} ">
 			</td>
-			<td><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
+			<c:choose>
+				<c:when test = "${boardList.groupLevel >0 }">
+					<td style="padding-left:20px"><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">ㄴ${boardList.title}</a></td>
+				</c:when>
+				<c:otherwise>
+					<td><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
+				</c:otherwise>
+			</c:choose>
 			<td>${boardList.contents }</td>
 		</tr>
 		</c:forEach>
