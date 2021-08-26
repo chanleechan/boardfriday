@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,12 @@ import com.lch.board.service.BoardService;
 public class BoardController {
 	
 	@RequestMapping("/boardList")
-	public String boardList(Model model,  HttpServletRequest req) throws SQLException{
+	public String boardList( Model model,  HttpServletRequest req) throws SQLException{
 		ArrayList<BoardDomain> boardList  = null;
 		ArrayList<Integer> totalNumList = null;
 		BoardService bs = new BoardService();
 		String pageNm = "";
-		totalNumList = bs.totalNum();
+		totalNumList = bs.totalNum(req);
 		
 		boardList  = bs.boardList(req);
 		if(boardList.size() > 0) {
