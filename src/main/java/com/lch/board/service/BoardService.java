@@ -59,13 +59,13 @@ public class BoardService {
 		return searchList;
 	}
 	
-	public ArrayList<Integer> totalNum() throws SQLException{
+	public ArrayList<Integer> totalNum(HttpServletRequest req) throws SQLException{
 		ArrayList<Integer> totalNumList = null;
 		totalNumList = new ArrayList<Integer>();
 		
 		BoardDao bd = new BoardDao();
 		
-		totalNumList = bd.totalNum();
+		totalNumList = bd.totalNum(req);
 		
 		return totalNumList;
 	}

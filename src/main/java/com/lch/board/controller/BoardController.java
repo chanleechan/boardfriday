@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,18 +18,20 @@ import com.lch.board.service.BoardService;
 public class BoardController {
 	
 	@RequestMapping("/boardList")
-	public String boardList(Model model,  HttpServletRequest req) throws SQLException{
+	public String boardList( Model model,  HttpServletRequest req) throws SQLException{
 		ArrayList<BoardDomain> boardList  = null;
 		ArrayList<Integer> totalNumList = null;
 		BoardService bs = new BoardService();
 		String pageNm = "";
-		totalNumList = bs.totalNum();
+		totalNumList = bs.totalNum(req);
 		
 		boardList  = bs.boardList(req);
 		if(boardList.size() > 0) {
 			model.addAttribute("boardList",boardList);
 			model.addAttribute("totalNumList",totalNumList);
 			pageNm = "/board/boardList";
+		}else {
+			pageNm ="/board/boardList";
 		}
 		
 		return pageNm;
@@ -93,18 +96,19 @@ public class BoardController {
 	@RequestMapping("/searchBoard")
 	public String searchList(Model model,HttpServletRequest req) throws SQLException {
 		ArrayList<BoardDomain> boardList = null;
-			boardList = new ArrayList<BoardDomain>();
-		//ArrayList<Integer> totalNumList = null;
-		String pageNm = "";
+		ArrayList<Integer> totalNumList = null;
 		BoardService bs = new BoardService();
+		String pageNm = "";
+		totalNumList = bs.totalNum(req);
 		boardList = bs.searchContents(req);
 		//totalNumList = bs.totalNum();
 		
 		if(boardList.size() > 0 ) {
-			model.addAttribute("boardList",boardList);
-		//	model.addAttribute("totalNumList",totalNumList);
-			
-			pageNm = "/board/searchList";
+			model.addAttribute("boardList",boardList);	
+			model.addAttribute("totalNumList",totalNumList);
+			pageNm = "/board/boardList";
+		}else {
+			pageNm = "/board/boardList";
 		}
 		return pageNm;
 	}
@@ -115,7 +119,7 @@ public class BoardController {
 		BoardService bs = new BoardService();
 		check = bs.insertReplyBoard(req);
 		if(check > 0) {
-			pageNm = "redirect/boardList";
+			pageNm = "redirect:/boardList";
 		}
 		return pageNm;
 	}

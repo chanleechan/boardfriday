@@ -4,11 +4,12 @@
 
 <html>
 <head>
+	<link rel ="stylesheet" href = "<c:url value="/resources/css/table.css"/>">
 	<title>게시판 목록</title>
 </head>
 
 <body>
-<div>
+<div class = "tableArea">
 	<table>
 		<tr>
 			<th>글번호</th>
@@ -17,10 +18,10 @@
 		</tr>
 		<c:forEach var="boardList"  items="${boardList }">
 		<tr>
-			<td><p>${boardList.boardNum}</p> 
+			<td ><p>${boardList.boardNum}</p> 
 			<input type="hidden" name="boardNum" value = "${boardList.boardNum} ">
 			</td>
-			<td><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
+			<td class = "title"><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
 			<td>${boardList.contents }</td>
 		</tr>
 		</c:forEach>
@@ -30,13 +31,14 @@
 		<a href = "/board/searchBoard?pageNum=${totalNumList }" >${totalNumList }</a>
 	</c:forEach>	
 	 -->
+</div>
+<div class="pagebar">
 	<form action ="/board/searchBoard" method = "get">
-	<p><input type ="text" name="contents"><input type="submit" value = "검색" ></p>
+	<p><input type ="text" name="contents"> <input type="submit" value = "검색" ></p>
 	</form>
 </div>
-<div>
+<div class = "newBoard">
 <a href ="/board/insertBoardForm">새 글 쓰기</a>
-
 </div>
 
 
