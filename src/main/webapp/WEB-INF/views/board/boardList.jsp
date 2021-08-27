@@ -28,7 +28,11 @@ document.addEventListener("DOMContentLoaded".function(){
 			</td>
 			<c:choose>
 				<c:when test = "${boardList.groupLevel >0 }">
+<<<<<<< HEAD
 					<td class = "title" style="padding-left: ${boardList.boardSeq * 20}px"><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">ㄴRE : ${boardList.title}</a></td>
+=======
+					<td class = "title" style="padding-left:20px"><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">ㄴRE : ${boardList.title}</a></td>
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 				</c:when>
 				<c:otherwise>
 					<td class = "title"><a href = "/board/selectBoard?boardNum=${boardList.boardNum}">${boardList.title}</a></td>
@@ -44,7 +48,11 @@ document.addEventListener("DOMContentLoaded".function(){
 	<c:forEach var="totalNumList" items="${totalNumList }">  
 		<a href = "/board/boardList?pageNum=${totalNumList }" >${totalNumList }</a>
 	</c:forEach>
+<<<<<<< HEAD
 	<a href = #>마지막으로</a>
+=======
+	<a href = "/board/boardList?pageNum=${totalNumList }">마지막으로</a>
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 	<form action ="/board/searchBoard" method = "get">
 	<p><input type ="text" name="contents" placeholder="검색" > <input type="submit" value = "검색" ></p>
 	</form>

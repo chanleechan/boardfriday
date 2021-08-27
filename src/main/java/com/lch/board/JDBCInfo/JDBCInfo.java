@@ -8,14 +8,13 @@ import java.sql.Statement;
 
 public class JDBCInfo {
 	public static Connection getConnection() throws SQLException {
-		String jdbcUrl = "jdbc:mysql://localhost:3306/board";
+		String jdbcUrl = "jdbc:mysql://localhost:3306/board?serverTimezone=UTC&useSSL=false";
 		String userId = "root";
-		String userPass = "0000";
+		String userPass = "password";
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Connection conn = DriverManager.getConnection(jdbcUrl,userId,userPass);

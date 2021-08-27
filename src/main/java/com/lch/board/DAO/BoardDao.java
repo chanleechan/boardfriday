@@ -48,7 +48,13 @@ public class BoardDao {
 
 		conn = JDBCInfo.getConnection();
 		String sql = "select * from board order by groupNum desc , groupLevel asc limit ?,?; ";
+<<<<<<< HEAD
 
+=======
+//		String sql = "select boardNum,boardSeq , title, contents, groupNum, groupLevel "
+//				+ "from board "
+//				+ "order by boardSeq desc, groupNum desc limit ?,?";
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, page);
@@ -107,16 +113,25 @@ public class BoardDao {
 			if(pd.getTotalNum()%5 >0) {
 				totalNum++;
 			}
+<<<<<<< HEAD
 			//총 게시글이 2페이지가 안될때
+=======
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 			if(curNum == totalNum) {
 				curNum = curNum -2;
 				if(curNum <=0) {
 					curNum = 1;
 				}
 			}else {
+<<<<<<< HEAD
 				if(curNum<3) {
 					curNum = 1;
 					totalNum = curNum+4;
+=======
+				if(curNum<=3) {
+					curNum = 1;
+					//totalNum = curNum+2;
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 				}else if(totalNum-curNum <= 1){
 					curNum = curNum-2;
 					totalNum = curNum+3;
@@ -148,7 +163,15 @@ public class BoardDao {
 		contents = req.getParameter("contents");
 		conn = JDBCInfo.getConnection();
 		String insertBoard = "insert into board(boardNum,title,contents,groupNum,groupLevel,boardSeq) "
+<<<<<<< HEAD
 				+ "values(null, ?,?,(select max(boardNum)+1 from board as t1),0,0)";
+=======
+<<<<<<< HEAD
+				+ "values(null, ?,?,(select max(boardNum)+1 from board as t1),0,0";
+=======
+				+ "values(null, ?,?,(select max(boardSeq)+1 from board as t1),0,(select max(boardSeq)+1 from board as t1))";
+>>>>>>> ff52be45bdf605a24b723ad3f587bb198dd5e3d7
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 		pstmt = conn.prepareStatement(insertBoard);
 		pstmt.setString(1, title);
 		pstmt.setString(2, contents);
@@ -314,9 +337,25 @@ public class BoardDao {
 		groupNum = req.getParameter("groupNum");
 		title = req.getParameter("title");
 		contents = req.getParameter("contents");
+<<<<<<< HEAD
 		String replySQL = "";
 		String updateSQL = "";
 
+=======
+		
+		String replySQL = "insert into board(boardNum,title,contents,groupNum,groupLevel,boardSeq) " + 
+				"	values(null,?,?, " + 
+<<<<<<< HEAD
+				"	(select b.groupNum from board b where boardNum = ?), " + 
+				"	(select max(b.groupLevel)+1 from board b where boardSeq = ?), " + //이부분 수정해야댐 대댓글이 잘 안됨
+				"	(select b.boardSeq from board b where boardNum = ?) " + 
+=======
+				"	(select b.groupNum from board b where boardSeq = ?), " + 
+				"	(select max(b.groupLevel)+1 from board b where groupNum = ?), " + 
+				"	(select b.boardSeq from board b where groupNum = ?) " + 
+>>>>>>> ff52be45bdf605a24b723ad3f587bb198dd5e3d7
+				");";
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 		
 		conn = JDBCInfo.getConnection();
 		if(boardSeq == 0) {
@@ -361,6 +400,7 @@ public class BoardDao {
 //			conn.commit();
 		}
 		
+<<<<<<< HEAD
 
 
 		
@@ -368,6 +408,8 @@ public class BoardDao {
 			check = 1;
 		}
 		
+=======
+>>>>>>> 5ee41837f3fb6eeeb4a8f6364a5413ccd7d1bc95
 		return check;
 	}
 }
